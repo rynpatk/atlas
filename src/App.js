@@ -1,24 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import { Box, Flex, Text } from '@chakra-ui/react';
+
+// TODO: theme
+const CYBER_YELLOW = '#FFEE00';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box bg={CYBER_YELLOW} height="100vh">
+      <Flex direction="column" height="100%" align="center" justify="center">
+        <Text fontWeight="black" fontSize="7xl" >Atlas</Text>
+        <Text fontSize="3xl" pt={1}>Coming Soon</Text>
+      </Flex>
+    </Box>
   );
 }
 
