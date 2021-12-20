@@ -1,8 +1,5 @@
 {
-    "rules": {
-      "quotes": [
-        "error",
-        "single"
-      ]
-    }
+  "rules": {
+    "quotes": ["error", "single"]
   }
+}
