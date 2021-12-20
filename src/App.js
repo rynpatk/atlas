@@ -3,6 +3,8 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 // TODO: theme
 const CYBER_YELLOW = '#FFEE00';
 
+const a = "b";
+
 function App() {
   return (
     <Box bg={CYBER_YELLOW} height="100vh">
