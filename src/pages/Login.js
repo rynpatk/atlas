@@ -1,6 +1,6 @@
 import { Button, Flex, Text } from '@chakra-ui/react';
 
-import { BASE_ROUTE } from 'app';
+import { BASE_ROUTE } from 'App';
 import { supabase } from 'supabase';
 
 export const Login = () => {
