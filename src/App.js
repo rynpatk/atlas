@@ -1,4 +1,4 @@
-import { Dashboard } from './pages/Dashboard';
+import { Dashboard, Login } from 'pages';
 
 // TODO: THEME... STEAL FROM DAISYUI AND PLUG INTO CHAKRA
 // TODO: AUTHENTICATION
@@ -11,8 +11,9 @@ import { Dashboard } from './pages/Dashboard';
 // TODO: REACT-QUERY ONCE BE BUILT
 // const CYBER_YELLOW = '#FFEE00';
 
-function App() {
-  return <Dashboard />;
-}
+const App = () => {
+  return <Login />;
+  // return <Dashboard />;
+};
 
 export default App;

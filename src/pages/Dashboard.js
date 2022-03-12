@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Flex, Text } from '@chakra-ui/react';
 
-import { MOCK_DATA } from '../mockData';
+import { MOCK_DATA } from 'mockData';
 
 const Sidebar = ({ categories, selectedCategory, setSelectedCategory }) => {
   return (
