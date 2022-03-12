@@ -1,5 +1,6 @@
 import { Button, Flex, Text } from '@chakra-ui/react';
 
+import { BASE_ROUTE } from 'app';
 import { supabase } from 'supabase';
 
 export const Login = () => {
@@ -9,13 +10,11 @@ export const Login = () => {
         provider: 'github',
       },
       {
-        redirectTo: 'https://rynpatk.github.io/atlas/dashboard',
+        redirectTo: `${BASE_ROUTE}/dashboard`,
       },
     );
 
-    console.log(user);
-    console.log(session);
-    console.log(error);
+    console.log({ user, session, error });
   };
 
   return (
