@@ -1,7 +1,10 @@
 import { Button, Flex, Text } from '@chakra-ui/react';
 
-import { BASE_ROUTE } from 'App';
 import { supabase } from 'supabase';
+
+// workaround for routing when deploying to gh pages
+// const isLocalDevelopment = process.env.NODE_ENV === 'development';
+// const BASE_ROUTE = isLocalDevelopment ? '' : '/atlas';
 
 export const Login = () => {
   const signInWithGithub = async () => {
@@ -10,7 +13,7 @@ export const Login = () => {
         provider: 'github',
       },
       {
-        redirectTo: `${BASE_ROUTE}/dashboard`,
+        redirectTo: '/dashboard',
       },
     );
 

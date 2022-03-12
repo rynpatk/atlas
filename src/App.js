@@ -2,10 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { Dashboard, Login } from 'pages';
 
-// workaround for routing when deploying to gh pages
-const isLocalDevelopment = process.env.NODE_ENV === 'development';
-export const BASE_ROUTE = isLocalDevelopment ? '' : '/atlas';
-
 // note to self:
 // npm run deploy
 
@@ -22,10 +18,10 @@ export const BASE_ROUTE = isLocalDevelopment ? '' : '/atlas';
 
 const App = () => {
   return (
-    <BrowserRouter basename={BASE_ROUTE}>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route exact path='/' element={<Login />} />
-        <Route exact path='/dashboard' element={<Dashboard />} />
+        <Route path='/dashboard' element={<Dashboard />} />
         <Route element={<Text>Oops!</Text>} status={404} />
       </Routes>
     </BrowserRouter>
