@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Dashboard, Login } from 'pages';
 
 // workaround for routing when deploying to gh pages
-const isLocalDevelopment = NODE_ENV === 'development';
+const isLocalDevelopment = process.env.NODE_ENV === 'development';
 export const BASE_ROUTE = isLocalDevelopment ? '' : '/atlas';
 
 // note to self:
