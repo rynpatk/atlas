@@ -13,7 +13,7 @@ export const Login = () => {
         provider: 'github',
       },
       {
-        redirectTo: `${process.env.PUBLIC_URL}/dashboard`,
+        redirectTo: `https://rynpatk.github.io/atlas/dashboard`,
       },
     );
 
