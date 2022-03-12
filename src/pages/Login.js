@@ -6,6 +6,16 @@ const { REACT_APP_SUPA_API_URL, REACT_APP_SUPA_API_KEY } = process.env;
 const OAUTH_REDIRECT_URI = `${REACT_APP_SUPA_API_URL}/auth/v1/callback`;
 
 export const Login = () => {
+  const signInWithGithub = async () => {
+    const { user, session, error } = await supabase.auth.signIn({
+      provider: 'github',
+    });
+
+    console.log(user);
+    console.log(session);
+    console.log(error);
+  };
+
   return (
     <Flex direction='column' bg='#E0C9A5' height='100vh'>
       <Flex
@@ -25,7 +35,7 @@ export const Login = () => {
           >
             Atlas
           </Text>
-          <Button colorScheme='teal' onClick={() => {}}>
+          <Button colorScheme='teal' onClick={signInWithGithub}>
             Login with Github
           </Button>
         </Flex>

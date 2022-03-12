@@ -1,9 +1,7 @@
 import { Dashboard, Login } from 'pages';
 
 // note to self:
-// npm run build and deploy with
-// git push -f origin master:gh-pages
-// gh-pages hosted @ https://rynpatk.github.io/atlas/
+// npm run deploy
 
 // TODO: THEME... STEAL FROM DAISYUI AND PLUG INTO CHAKRA
 // TODO: AUTHENTICATION
