@@ -22,7 +22,7 @@ export const BASE_ROUTE = isLocalDevelopment ? '' : '/atlas';
 
 const App = () => {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter basename={BASE_ROUTE}>
       <Routes>
         <Route exact path='/' element={<Login />} />
         <Route exact path='/dashboard' element={<Dashboard />} />
