@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import { Dashboard, Login } from 'pages';
 
 // note to self:
@@ -15,8 +17,14 @@ import { Dashboard, Login } from 'pages';
 // const CYBER_YELLOW = '#FFEE00';
 
 const App = () => {
-  return <Login />;
-  // return <Dashboard />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route to='/dashboard' element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default App;
