@@ -22,10 +22,11 @@ export const BASE_ROUTE = isLocalDevelopment ? '' : '/atlas';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
-        <Route path={`${BASE_ROUTE}/dashboard`} element={<Dashboard />} />
-        <Route exact path={`${BASE_ROUTE}/`} element={<Login />} />
+        <Route exact path='/' element={<Login />} />
+        <Route exact path='/dashboard' element={<Dashboard />} />
+        <Route element={<Text>Oops!</Text>} status={404} />
       </Routes>
     </BrowserRouter>
   );
