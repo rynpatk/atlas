@@ -3,13 +3,18 @@ import { Button, Flex, Text } from '@chakra-ui/react';
 import { supabase } from 'supabase';
 
 const { REACT_APP_SUPA_API_URL, REACT_APP_SUPA_API_KEY } = process.env;
-const OAUTH_REDIRECT_URI = `${REACT_APP_SUPA_API_URL}/auth/v1/callback`;
+// const OAUTH_REDIRECT_URI = `${REACT_APP_SUPA_API_URL}/auth/v1/callback`;
 
 export const Login = () => {
   const signInWithGithub = async () => {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: 'github',
-    });
+    const { user, session, error } = await supabase.auth.signIn(
+      {
+        provider: 'github',
+      },
+      {
+        redirectTo: '/atlas/test-redirect',
+      },
+    );
 
     console.log(user);
     console.log(session);
