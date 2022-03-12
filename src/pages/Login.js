@@ -13,7 +13,7 @@ export const Login = () => {
         provider: 'github',
       },
       {
-        redirectTo: '/dashboard',
+        redirectTo: `${process.env.PUBLIC_URL}/dashboard`,
       },
     );
 
