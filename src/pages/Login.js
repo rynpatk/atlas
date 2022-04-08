@@ -1,23 +1,23 @@
+import React from 'react';
 import { Button, Flex, Text } from '@chakra-ui/react';
 
-import { supabase } from 'supabase';
-
-// workaround for routing when deploying to gh pages
-// const isLocalDevelopment = process.env.NODE_ENV === 'development';
-// const BASE_ROUTE = isLocalDevelopment ? '' : '/atlas';
+import supabase from 'supabase';
 
 export const Login = () => {
-  const signInWithGithub = async () => {
-    const { user, session, error } = await supabase.auth.signIn(
+  const isLocalDevelopment = process.env.NODE_ENV === 'development';
+
+  // TODO: additional login channels
+  const signInWithGithub = () => {
+    supabase.auth.signIn(
       {
         provider: 'github',
       },
       {
-        redirectTo: 'https://rynpatk.github.io/atlas/dashboard',
+        redirectTo: isLocalDevelopment
+          ? 'http://localhost:3000/atlas'
+          : 'https://rynpatk.github.io/atlas',
       },
     );
-
-    console.log({ user, session, error });
   };
 
   return (

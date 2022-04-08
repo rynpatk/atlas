@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
-import { Flex, Text } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Button, Flex, Text } from '@chakra-ui/react';
 
+import supabase from 'supabase';
 import { MOCK_DATA } from 'mockData';
 
 const Sidebar = ({ categories, selectedCategory, setSelectedCategory }) => {
@@ -19,6 +20,7 @@ const Sidebar = ({ categories, selectedCategory, setSelectedCategory }) => {
 
         return (
           <Text
+            key={category}
             fontWeight={isSelected ? 'bold' : null}
             onClick={() => {
               if (isSelected) {
@@ -70,17 +72,21 @@ const Grid = ({ category, contents }) => {
     <>
       <Flex direction='row' flexWrap='wrap' justifyContent='flex-start' pr={3}>
         {Object.values(contents).map((site) => {
-          return <Tile {...site} />;
+          return <Tile key={site} {...site} />;
         })}
       </Flex>
     </>
   );
 };
 
-export const Dashboard = () => {
+export const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const categories = Object.keys(MOCK_DATA);
   const contents = selectedCategory ? MOCK_DATA[selectedCategory] : null;
+
+  const signOut = () => {
+    supabase.auth.signOut();
+  };
 
   return (
     <Flex direction='column' bg='paper' height='100vh'>
@@ -116,6 +122,16 @@ export const Dashboard = () => {
           <Grid category={selectedCategory} contents={contents} />
         </Flex>
       </Flex>
+      <Button
+        zIndex={100}
+        position='absolute'
+        bottom={10}
+        right={10}
+        colorScheme='teal'
+        onClick={signOut}
+      >
+        Logout
+      </Button>
     </Flex>
   );
 };
