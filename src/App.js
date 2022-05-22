@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Text } from '@chakra-ui/react';
-
 import supabase from 'supabase';
+
 import { Main, Login } from 'pages';
 
 // development notes:
@@ -37,7 +37,7 @@ const App = () => {
         <Route
           exact
           path='/'
-          element={isAuthenticated ? <Main /> : <Login />}
+          element={isAuthenticated ? <Main user={user} /> : <Login />}
         />
         <Route element={<Text>Oops!</Text>} status={404} />
       </Routes>

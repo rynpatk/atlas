@@ -21,7 +21,7 @@ export const Login = () => {
   };
 
   return (
-    <Flex direction='column' bg='#E0C9A5' height='100vh'>
+    <Flex direction='column' bg='paper' height='100vh'>
       <Flex
         align='center'
         justify='center'
@@ -30,18 +30,26 @@ export const Login = () => {
         height='100%'
       >
         <Flex direction='column' align='center'>
-          <Text
-            color='black'
-            fontFamily='Lora'
-            fontWeight={700}
-            fontSize='6xl'
-            pb={3}
-          >
+          <Text color='softBlack' fontWeight={700} fontSize='6xl' pb={5}>
             Atlas
           </Text>
-          <Button colorScheme='teal' onClick={signInWithGithub}>
+
+          {/* TODO: make multicolor button */}
+          <Button color='black' bg='Terracotta' onClick={signInWithGithub}>
             Login with Github
           </Button>
+          {/* <Button color='black' bg='Keppel' onClick={signInWithGithub}>
+            Login with Github
+          </Button>
+          <Button color='black' bg='OrientalPink' onClick={signInWithGithub}>
+            Login with Github
+          </Button>
+          <Button color='black' bg='HalfBaked' onClick={signInWithGithub}>
+            Login with Github
+          </Button>
+          <Button color='black' bg='Tacao' onClick={signInWithGithub}>
+            Login with Github
+          </Button> */}
         </Flex>
       </Flex>
     </Flex>
