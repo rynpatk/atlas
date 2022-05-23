@@ -9,8 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import supabase from 'supabase';
-import { IoMdTrash } from 'react-icons/io';
-import { BsHandIndexThumb } from 'react-icons/bs';
+import { BsCursor, BsHandIndexThumb, BsTrash } from 'react-icons/bs';
 
 const HighlightedText = ({ str, substr = '' }) => {
   const startIndex = str.indexOf(substr);
@@ -56,7 +55,9 @@ const LinkListItem = ({ url, inputTerm }) => {
       _hover={{
         cursor: 'pointer',
         fontWeight: 600,
-        color: 'Keppel',
+        // TODO: have color change based on mode
+        color: 'blue.500',
+        // color: 'Keppel',
       }}
     >
       <HighlightedText str={url} substr={inputTerm} />
@@ -93,6 +94,19 @@ const Tools = () => {
   return (
     <Flex direction='row'>
       <IconButton
+        // disabled
+        mr={3}
+        // use variant as a select mode
+        // variant='outline'
+        variant='solid'
+        colorScheme='blue'
+        aria-label='open links'
+        fontSize='25px'
+        p={2}
+        borderRadius={2}
+        icon={<BsCursor />}
+      />
+      <IconButton
         disabled
         mr={3}
         variant='outline'
@@ -111,7 +125,7 @@ const Tools = () => {
         fontSize='25px'
         p={2}
         borderRadius={2}
-        icon={<IoMdTrash />}
+        icon={<BsTrash />}
       />
     </Flex>
   );
@@ -260,12 +274,13 @@ export const Main = ({ user }) => {
             // playing with mobile scroll
             height='calc(100vh - 105px - 75px)'
             overflowY='scroll'
-            pt={5}
+            pt={[2, 2, 5]}
           >
             <Links category={null} links={links} inputTerm={inputTerm} />
           </Flex>
         </Flex>
       </Flex>
+      {/* replace bottom buttons with an account page */}
       <Button
         zIndex={100}
         position='absolute'
