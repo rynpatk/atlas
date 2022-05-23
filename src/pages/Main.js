@@ -1,18 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {
-  Box,
-  Stack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Button,
-  Flex,
-  Text,
-  Span,
-} from '@chakra-ui/react';
-
+import { Box, Input, InputGroup, Button, Flex, Text } from '@chakra-ui/react';
 import supabase from 'supabase';
-import { MOCK_DATA } from 'mockData';
 
 const HighlightedText = ({ str, substr = '' }) => {
   const startIndex = str.indexOf(substr);
@@ -48,7 +36,13 @@ const LinkListItem = ({ url, inputTerm }) => {
     <Flex
       m={[1, 1, 2]}
       // TODO: open as background tab
-      onClick={() => window.open(url, '_blank')}
+      onClick={() => {
+        if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
+          window.open(url, '_blank');
+        } else {
+          window.open(`http://${url}`, '_blank');
+        }
+      }}
       _hover={{
         cursor: 'pointer',
         fontWeight: 600,
@@ -66,8 +60,6 @@ const Links = ({ category, links, inputTerm }) => {
     return null;
   }
 
-  const linksToRender = [...links, ...links, ...links];
-
   return (
     <Flex
       direction='row'
@@ -78,7 +70,7 @@ const Links = ({ category, links, inputTerm }) => {
       overflowX='hidden'
       pb={20}
     >
-      {linksToRender.map((link) => {
+      {links.map((link) => {
         return (
           <LinkListItem key={link.id} url={link.url} inputTerm={inputTerm} />
         );
@@ -92,9 +84,9 @@ export const Main = ({ user }) => {
   const [inputTerm, setInputTerm] = useState(null);
   const [isCreatingLink, setIsCreatingLink] = useState(false);
   const [links, setLinks] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const categories = Object.keys(MOCK_DATA);
-  const contents = selectedCategory ? MOCK_DATA[selectedCategory] : null;
+  // const [selectedCategory, setSelectedCategory] = useState(null);
+  // const categories = Object.keys(MOCK_DATA);
+  // const contents = selectedCategory ? MOCK_DATA[selectedCategory] : null;
 
   const signOut = () => {
     supabase.auth.signOut();
@@ -157,7 +149,7 @@ export const Main = ({ user }) => {
     if (!links) {
       fetchLinks();
     }
-  }, []);
+  }, [links]);
 
   return (
     <Flex direction='column' bg='paper' height='100vh' overflowY='hidden'>
@@ -248,20 +240,21 @@ export const Main = ({ user }) => {
       >
         <input
           type='file'
+          ref={inputRef}
+          style={{ display: 'none' }}
           // onChange={(e) => onChange(e.target.files[0])}
           // accept={acceptedFileTypes}
           // name={name}
-          ref={inputRef}
           // {...inputProps}
-          style={{ display: 'none' }}
         />
         <Button
-          // placeholder={placeholder || 'Your file ...'}
           onClick={() => inputRef.current.click()}
+          bg='HalfBaked'
+          disabled
+          // placeholder={placeholder || 'Your file ...'}
           // onChange={(e) => {}}
           // readOnly={true}
           // value={(value && value.name) || ''}
-          bg='HalfBaked'
         >
           Import
         </Button>
