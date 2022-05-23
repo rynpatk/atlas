@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Box,
   Stack,
@@ -14,66 +14,6 @@ import {
 import supabase from 'supabase';
 import { MOCK_DATA } from 'mockData';
 
-// const Sidebar = ({ categories, selectedCategory, setSelectedCategory }) => {
-//   return (
-//     <Flex
-//       bg='#E0C9A5'
-//       height='100%'
-//       width='100%'
-//       direction='column'
-//       border='1px solid'
-//       borderColor='softBlack'
-//       p={3}
-//     >
-//       {categories.map((category) => {
-//         const isSelected = selectedCategory === category;
-
-//         return (
-//           <Text
-//             key={category}
-//             fontWeight={isSelected ? 'bold' : null}
-//             onClick={() => {
-//               if (isSelected) {
-//                 setSelectedCategory(null);
-//               } else {
-//                 setSelectedCategory(category);
-//               }
-//             }}
-//             _hover={{
-//               fontWeight: 'bold',
-//               cursor: 'pointer',
-//             }}
-//           >
-//             {category}
-//           </Text>
-//         );
-//       })}
-//     </Flex>
-//   );
-// };
-
-// const Tile = ({ url }) => {
-//   return (
-//     <Flex
-//       height='150px'
-//       width='250px'
-//       mt={2}
-//       mr={3}
-//       border='1px solid'
-//       borderColor='softBlack'
-//       _hover={{
-//         borderWidth: '2px',
-//         cursor: 'pointer',
-//       }}
-//     >
-//       <Text pl={3} pt={2}>
-//         {url}
-//       </Text>
-//     </Flex>
-//   );
-// };
-
-// TODO: get this working properly
 const HighlightedText = ({ str, substr = '' }) => {
   const startIndex = str.indexOf(substr);
 
@@ -120,32 +60,35 @@ const LinkListItem = ({ url, inputTerm }) => {
   );
 };
 
-const Grid = ({ category, links, inputTerm }) => {
+const Links = ({ category, links, inputTerm }) => {
   if (!links) {
     // TODO: loading spinner
     return null;
   }
 
+  const linksToRender = [...links, ...links, ...links];
+
   return (
-    <>
-      <Flex
-        direction='row'
-        flexWrap='wrap'
-        justify='center'
-        align='center'
-        pr={3}
-      >
-        {links.map((link) => {
-          return (
-            <LinkListItem key={link.id} url={link.url} inputTerm={inputTerm} />
-          );
-        })}
-      </Flex>
-    </>
+    <Flex
+      direction='row'
+      flexWrap='wrap'
+      justify='center'
+      align='center'
+      overflowY='scroll'
+      overflowX='hidden'
+      pb={20}
+    >
+      {linksToRender.map((link) => {
+        return (
+          <LinkListItem key={link.id} url={link.url} inputTerm={inputTerm} />
+        );
+      })}
+    </Flex>
   );
 };
 
 export const Main = ({ user }) => {
+  const inputRef = useRef();
   const [inputTerm, setInputTerm] = useState(null);
   const [isCreatingLink, setIsCreatingLink] = useState(false);
   const [links, setLinks] = useState(null);
@@ -263,7 +206,7 @@ export const Main = ({ user }) => {
               pt={3}
               alignSelf='flex-end'
               variant='link'
-              color='Keppel'
+              color='OrientalPink'
               onClick={addLink}
               disabled={!inputTerm || isCreatingLink}
               _hover={{
@@ -274,21 +217,55 @@ export const Main = ({ user }) => {
             </Button>
           </Flex>
 
-          <Flex direction='column' width='100%' height='100%'>
-            <Grid category={null} links={links} inputTerm={inputTerm} />
+          <Flex
+            direction='column'
+            width='100%'
+            // height='100%'
+            // playing with mobile scroll
+            height='calc(100vh - 105px - 75px)'
+            overflowY='scroll'
+            pt={5}
+          >
+            <Links category={null} links={links} inputTerm={inputTerm} />
           </Flex>
         </Flex>
       </Flex>
       <Button
         zIndex={100}
         position='absolute'
-        bottom={10}
-        right={10}
+        bottom={[5, 5, 10]}
+        left={[5, 5, 10]}
         bg='Terracotta'
         onClick={signOut}
       >
         Logout
       </Button>
+      <Box
+        zIndex={100}
+        position='absolute'
+        bottom={[5, 5, 10]}
+        right={[5, 5, 10]}
+      >
+        <input
+          type='file'
+          // onChange={(e) => onChange(e.target.files[0])}
+          // accept={acceptedFileTypes}
+          // name={name}
+          ref={inputRef}
+          // {...inputProps}
+          style={{ display: 'none' }}
+        />
+        <Button
+          // placeholder={placeholder || 'Your file ...'}
+          onClick={() => inputRef.current.click()}
+          // onChange={(e) => {}}
+          // readOnly={true}
+          // value={(value && value.name) || ''}
+          bg='HalfBaked'
+        >
+          Import
+        </Button>
+      </Box>
     </Flex>
   );
 };
