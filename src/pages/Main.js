@@ -1,6 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Input, InputGroup, Button, Flex, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Input,
+  InputGroup,
+  IconButton,
+  Button,
+  Flex,
+  Text,
+} from '@chakra-ui/react';
 import supabase from 'supabase';
+import { IoMdTrash } from 'react-icons/io';
+import { BsHandIndexThumb } from 'react-icons/bs';
 
 const HighlightedText = ({ str, substr = '' }) => {
   const startIndex = str.indexOf(substr);
@@ -79,6 +89,34 @@ const Links = ({ category, links, inputTerm }) => {
   );
 };
 
+const Tools = () => {
+  return (
+    <Flex direction='row'>
+      <IconButton
+        disabled
+        mr={3}
+        variant='outline'
+        colorScheme='green'
+        aria-label='select links'
+        fontSize='25px'
+        p={2}
+        borderRadius={2}
+        icon={<BsHandIndexThumb />}
+      />
+      <IconButton
+        disabled
+        variant='outline'
+        colorScheme='orange'
+        aria-label='delete links'
+        fontSize='25px'
+        p={2}
+        borderRadius={2}
+        icon={<IoMdTrash />}
+      />
+    </Flex>
+  );
+};
+
 export const Main = ({ user }) => {
   const inputRef = useRef();
   const [inputTerm, setInputTerm] = useState(null);
@@ -153,23 +191,28 @@ export const Main = ({ user }) => {
 
   return (
     <Flex direction='column' bg='paper' height='100vh' overflowY='hidden'>
-      <Flex direction='column' width='100%' justify='flex-start' pl={5}>
-        <Text
-          color='softBlack'
-          fontWeight='black'
-          fontSize={['3xl', '3xl', '4xl']}
-          pt={2}
-        >
-          Atlas
-        </Text>
-        <Text
-          color='gray.400'
-          fontWeight='black'
-          fontSize={['xl', 'xl', '2xl']}
-          mt={-2}
-        >
-          アトラス
-        </Text>
+      <Flex direction='column' width='100%' justify='flex-start'>
+        <Flex direction='row' px={5} justify='space-between' align='center'>
+          <Flex direction='column'>
+            <Text
+              color='softBlack'
+              fontWeight='black'
+              fontSize={['3xl', '3xl', '4xl']}
+              pt={2}
+            >
+              Atlas
+            </Text>
+            <Text
+              color='gray.400'
+              fontWeight='black'
+              fontSize={['xl', 'xl', '2xl']}
+              mt={-2}
+            >
+              アトラス
+            </Text>
+          </Flex>
+          <Tools />
+        </Flex>
       </Flex>
       <Flex direction='column' alignItems='center' width='100%' height='100%'>
         <Flex
@@ -201,6 +244,7 @@ export const Main = ({ user }) => {
               color='OrientalPink'
               onClick={addLink}
               disabled={!inputTerm || isCreatingLink}
+              borderRadius={2}
               _hover={{
                 textDecoration: 'none',
               }}
@@ -229,6 +273,7 @@ export const Main = ({ user }) => {
         left={[5, 5, 10]}
         bg='Terracotta'
         onClick={signOut}
+        borderRadius={2}
       >
         Logout
       </Button>
@@ -251,6 +296,7 @@ export const Main = ({ user }) => {
           onClick={() => inputRef.current.click()}
           bg='HalfBaked'
           disabled
+          borderRadius={2}
           // placeholder={placeholder || 'Your file ...'}
           // onChange={(e) => {}}
           // readOnly={true}

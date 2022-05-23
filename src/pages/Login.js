@@ -35,7 +35,12 @@ export const Login = () => {
           </Text>
 
           {/* TODO: make multicolor button */}
-          <Button color='black' bg='Terracotta' onClick={signInWithGithub}>
+          <Button
+            borderRadius={2}
+            color='black'
+            bg='Terracotta'
+            onClick={signInWithGithub}
+          >
             Login with Github
           </Button>
           {/* <Button color='black' bg='Keppel' onClick={signInWithGithub}>
