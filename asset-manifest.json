@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/atlas/static/css/main.bfa22019.chunk.css",
-    "main.js": "/atlas/static/js/main.0e2ea43f.chunk.js",
-    "main.js.map": "/atlas/static/js/main.0e2ea43f.chunk.js.map",
+    "main.js": "/atlas/static/js/main.fefb9879.chunk.js",
+    "main.js.map": "/atlas/static/js/main.fefb9879.chunk.js.map",
     "runtime-main.js": "/atlas/static/js/runtime-main.e0ebc1d1.js",
     "runtime-main.js.map": "/atlas/static/js/runtime-main.e0ebc1d1.js.map",
-    "static/js/2.7ceda7f2.chunk.js": "/atlas/static/js/2.7ceda7f2.chunk.js",
-    "static/js/2.7ceda7f2.chunk.js.map": "/atlas/static/js/2.7ceda7f2.chunk.js.map",
+    "static/js/2.b8008889.chunk.js": "/atlas/static/js/2.b8008889.chunk.js",
+    "static/js/2.b8008889.chunk.js.map": "/atlas/static/js/2.b8008889.chunk.js.map",
     "index.html": "/atlas/index.html",
     "static/css/main.bfa22019.chunk.css.map": "/atlas/static/css/main.bfa22019.chunk.css.map",
-    "static/js/2.7ceda7f2.chunk.js.LICENSE.txt": "/atlas/static/js/2.7ceda7f2.chunk.js.LICENSE.txt"
+    "static/js/2.b8008889.chunk.js.LICENSE.txt": "/atlas/static/js/2.b8008889.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.e0ebc1d1.js",
-    "static/js/2.7ceda7f2.chunk.js",
+    "static/js/2.b8008889.chunk.js",
     "static/css/main.bfa22019.chunk.css",
-    "static/js/main.0e2ea43f.chunk.js"
+    "static/js/main.fefb9879.chunk.js"
   ]
 }
