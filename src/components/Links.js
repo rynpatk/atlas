@@ -1,37 +1,54 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
 
+import useStore from 'store/useStore';
 import HighlightedText from 'components/HighlightedText';
 
-export const LinkListItem = ({ url, inputTerm }) => {
+export const LinkListItem = ({ link, inputTerm, onClick, activeTool }) => {
   return (
     <Flex
       m={[1, 1, 2]}
-      // TODO: open as background tab
       onClick={() => {
-        if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
-          window.open(url, '_blank');
-        } else {
-          window.open(`http://${url}`, '_blank');
-        }
+        onClick(link);
       }}
-      _hover={{
-        cursor: 'pointer',
-        fontWeight: 600,
-        // TODO: have color change based on mode
-        color: 'blue.500',
-      }}
+      _hover={
+        activeTool
+          ? {
+              cursor: 'pointer',
+              fontWeight: 600,
+              // TODO: have color change based on mode
+              color: activeTool === 'delete' ? 'orange.500' : 'blue.500',
+            }
+          : {}
+      }
     >
-      <HighlightedText str={url} substr={inputTerm} />
+      <HighlightedText str={link.url} substr={inputTerm} />
     </Flex>
   );
 };
 
-export const Links = ({ category, links, inputTerm }) => {
+export const Links = ({ deleteLink, links, inputTerm }) => {
+  const activeTool = useStore((state) => state.activeTool);
+
   if (!links) {
     // TODO: loading spinner
     return null;
   }
+
+  const onClick = async (link) => {
+    if (activeTool === 'open') {
+      if (
+        link.url.indexOf('http://') === 0 ||
+        link.url.indexOf('https://') === 0
+      ) {
+        window.open(link.url, '_blank');
+      } else {
+        window.open(`http://${link.url}`, '_blank');
+      }
+    } else if (activeTool === 'delete') {
+      deleteLink(link.id);
+    }
+  };
 
   return (
     <Flex
@@ -45,7 +62,13 @@ export const Links = ({ category, links, inputTerm }) => {
     >
       {links.map((link) => {
         return (
-          <LinkListItem key={link.id} url={link.url} inputTerm={inputTerm} />
+          <LinkListItem
+            key={link.id}
+            link={link}
+            inputTerm={inputTerm}
+            onClick={onClick}
+            activeTool={activeTool}
+          />
         );
       })}
     </Flex>

@@ -31,14 +31,14 @@ export const Main = ({ user }) => {
     }
   };
 
-  // const deleteLink = async (id) => {
-  //   try {
-  //     await supabase.from('todos').delete().eq('id', id);
-  //     setTodos(todos.filter((x) => x.id !== id));
-  //   } catch (error) {
-  //     console.log('error', error);
-  //   }
-  // };
+  const deleteLink = async (id) => {
+    try {
+      await supabase.from('links').delete().eq('id', id);
+      setLinks(links.filter((link) => link.id !== id));
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
 
   const addLink = async () => {
     if (!inputTerm) return;
@@ -150,7 +150,12 @@ export const Main = ({ user }) => {
             overflowY='scroll'
             pt={[2, 2, 5]}
           >
-            <Links category={null} links={links} inputTerm={inputTerm} />
+            <Links
+              category={null}
+              links={links}
+              inputTerm={inputTerm}
+              deleteLink={deleteLink}
+            />
           </Flex>
         </Flex>
       </Flex>
