@@ -2,15 +2,18 @@ import React from 'react';
 import { IconButton, Flex } from '@chakra-ui/react';
 import { BsCursor, BsHandIndexThumb, BsTrash } from 'react-icons/bs';
 
+import useStore from 'store/useStore';
+
 export const Tools = () => {
+  const activeTool = useStore((state) => state.activeTool);
+  const setActiveTool = useStore((state) => state.setActiveTool);
+
   return (
     <Flex direction='row'>
       <IconButton
-        // disabled
         mr={3}
-        // use variant as a select mode
-        // variant='outline'
-        variant='solid'
+        variant={activeTool === 'open' ? 'solid' : 'outline'}
+        onClick={() => setActiveTool('open')}
         colorScheme='blue'
         aria-label='open links'
         fontSize='25px'
@@ -21,7 +24,8 @@ export const Tools = () => {
       <IconButton
         disabled
         mr={3}
-        variant='outline'
+        variant={activeTool === 'select' ? 'solid' : 'outline'}
+        onClick={() => setActiveTool('select')}
         colorScheme='green'
         aria-label='select links'
         fontSize='25px'
@@ -30,8 +34,8 @@ export const Tools = () => {
         icon={<BsHandIndexThumb />}
       />
       <IconButton
-        disabled
-        variant='outline'
+        variant={activeTool === 'delete' ? 'solid' : 'outline'}
+        onClick={() => setActiveTool('delete')}
         colorScheme='orange'
         aria-label='delete links'
         fontSize='25px'
