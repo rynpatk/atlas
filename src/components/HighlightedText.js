@@ -3,7 +3,17 @@ import { Text } from '@chakra-ui/react';
 
 export const HighlightedText = ({ str, substr = '' }) => {
   if (!substr || !substr.trim()) {
-    return <Text fontSize={['sm', 'sm', 'md']}>{str}</Text>;
+    return (
+      <>
+        <Text mx={1} my={0.5} fontSize={['sm', 'sm', 'md']}>
+          {str}
+        </Text>
+        {/* TODO makee this work nicely */}
+        <Text mx={1} my={0.5} fontSize={['sm', 'sm', 'md']}>
+          &bull;
+        </Text>
+      </>
+    );
   }
 
   const startIndex = str.toLowerCase().indexOf(substr.toLowerCase());
@@ -15,7 +25,7 @@ export const HighlightedText = ({ str, substr = '' }) => {
     const endText = str.slice(endIndex, str.length);
 
     return (
-      <Text fontSize={['sm', 'sm', 'md']}>
+      <Text fontSize={['sm', 'sm', 'md']} mx={1} my={0.5}>
         {startText}
         <Text as='span' fontWeight={600} color='blue.500'>
           {highlightedText}

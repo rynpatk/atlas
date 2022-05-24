@@ -7,7 +7,6 @@ import HighlightedText from 'components/HighlightedText';
 export const LinkListItem = ({ link, inputTerm, onClick, activeTool }) => {
   return (
     <Flex
-      m={[1, 1, 2]}
       onClick={() => {
         onClick(link);
       }}
@@ -54,10 +53,10 @@ export const Links = ({ deleteLink, links, inputTerm }) => {
     <Flex
       direction='row'
       flexWrap='wrap'
-      justify='center'
+      justify={['flex-start', 'flex-start', 'center']}
       align='center'
-      overflowY='scroll'
       overflowX='hidden'
+      px={2}
       pb={20}
     >
       {links.map((link) => {

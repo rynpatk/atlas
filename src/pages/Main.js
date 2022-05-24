@@ -103,18 +103,13 @@ export const Main = ({ user }) => {
         </Flex>
       </Flex>
       <Flex direction='column' alignItems='center' width='100%' height='100%'>
-        <Flex
-          direction='column'
-          justify='center'
-          align='center'
-          width='100vw'
-          px={3}
-        >
+        <Flex direction='column' justify='center' align='center' width='100vw'>
           <Flex
             direction='column'
             pb={[4, 4, 8]}
             pt={4}
             width={['95vw', '95vw', '65vw']}
+            px={3}
           >
             <InputGroup justifySelf='center'>
               <Input
@@ -148,7 +143,7 @@ export const Main = ({ user }) => {
             // playing with mobile scroll
             height='calc(100vh - 105px - 75px)'
             overflowY='scroll'
-            pt={[2, 2, 5]}
+            pt={[1, 1, 5]}
           >
             <Links
               category={null}
