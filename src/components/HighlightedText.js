@@ -8,10 +8,6 @@ export const HighlightedText = ({ str, substr = '' }) => {
         <Text mx={1} my={0.5} fontSize={['sm', 'sm', 'md']}>
           {str}
         </Text>
-        {/* TODO makee this work nicely */}
-        <Text mx={1} my={0.5} fontSize={['sm', 'sm', 'md']}>
-          &bull;
-        </Text>
       </>
     );
   }
@@ -27,7 +23,7 @@ export const HighlightedText = ({ str, substr = '' }) => {
     return (
       <Text fontSize={['sm', 'sm', 'md']} mx={1} my={0.5}>
         {startText}
-        <Text as='span' fontWeight={600} color='blue.500'>
+        <Text as='span' fontWeight={600} color='warning'>
           {highlightedText}
         </Text>
         {endText}
@@ -35,11 +31,6 @@ export const HighlightedText = ({ str, substr = '' }) => {
     );
   } else {
     return null;
-    // return (
-    //   <Text fontSize={['sm', 'sm', 'md']} color='gray.400'>
-    //     {str}
-    //   </Text>
-    // );
   }
 };
 

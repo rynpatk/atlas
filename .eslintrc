@@ -8,7 +8,8 @@
   "extends": [
     "plugin:react/recommended",
     "plugin:jsx-a11y/strict",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "eslint:recommended"
   ],
   "parser": "babel-eslint",
   "parserOptions": {
@@ -32,7 +33,7 @@
     "react-hooks/exhaustive-deps": "warn",
     "no-console": "off",
     "no-undef": 1,
-    "no-unused-vars": ["warn", { "args": "none" }],
+    // "no-unused-vars": ["warn", { "vars": "all" }],
     "no-param-reassign": "off",
     "react/prop-types": 0,
     "prettier/prettier": ["error"],

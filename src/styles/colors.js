@@ -5,7 +5,6 @@ export const colors = {
   Tacao: '#E8A87C',
   OrientalPink: '#C38D9E',
   Keppel: '#41B3A3',
-
   softBlack: '#282425',
 
   // old
@@ -17,11 +16,10 @@ export const colors = {
   'secondary-content': '#282425',
   softYellow: '#ebdc99',
   'accent-focus': '#e2cd6e',
-
   neutral: '#7d7259',
   'neutral-focus': '#454035',
   paper: '#fbfbf8',
-  // paper: '#e4d8b4',
+  base: '#e4d8b4',
   'base-100': '#e4d8b4',
   'base-200': '#d2c59d',
   'base-300': '#c6b386',
@@ -30,6 +28,8 @@ export const colors = {
   success: '#009485',
   warning: '#ff9900',
   error: '#ff5724',
+  canvas: '#F4F1EA',
+  light: '#FFFFFF',
 };
 
 export default colors;

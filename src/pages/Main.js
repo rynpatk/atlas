@@ -1,21 +1,47 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Box, Input, InputGroup, Button, Flex, Text } from '@chakra-ui/react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Box, Button, Input, InputGroup, Flex, Text } from '@chakra-ui/react';
 import supabase from 'supabase';
 
 import Links from 'components/Links';
-import Tools from 'components/Tools';
+import openLink from 'utils/openLink';
+
+const MAX_OPENABLE_LINKS = 10;
 
 export const Main = ({ user }) => {
-  const inputRef = useRef();
+  const [activeTopicId, setActiveTopicId] = useState(null);
+  const [activeLinkId, setActiveLinkId] = useState(null);
   const [inputTerm, setInputTerm] = useState(null);
   const [isCreatingLink, setIsCreatingLink] = useState(false);
   const [links, setLinks] = useState(null);
-  // const [selectedCategory, setSelectedCategory] = useState(null);
-  // const categories = Object.keys(MOCK_DATA);
-  // const contents = selectedCategory ? MOCK_DATA[selectedCategory] : null;
+  const [topics, setTopics] = useState(null);
 
-  const signOut = () => {
-    supabase.auth.signOut();
+  const activeTopic = topics?.find((topic) => topic.id === activeTopicId);
+
+  // TODO: filter to active topic prior to input term filtering
+  const filteredLinks = useMemo(() => {
+    // note: duplication of logic with HighlightedText internal code...
+    if (!inputTerm) return links || [];
+
+    return links?.filter((link) => {
+      return link?.url.toLowerCase().indexOf(inputTerm.toLowerCase()) >= 0;
+    });
+  }, [inputTerm, links]);
+
+  // const signOut = () => {
+  //   supabase.auth.signOut();
+  // };
+
+  const fetchTopics = async () => {
+    const { data, error } = await supabase
+      .from('groups')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) {
+      console.log('error', error);
+    } else {
+      setTopics(data);
+    }
   };
 
   const fetchLinks = async () => {
@@ -59,6 +85,29 @@ export const Main = ({ user }) => {
     }
   };
 
+  // "topics" in the UI; "groups" in the DB
+  const createTopic = async () => {
+    const { data: newTopic, error } = await supabase
+      .from('groups')
+      .insert({ name: null, user_id: user.id })
+      .single();
+
+    if (error) {
+      console.log(error);
+    } else {
+      setTopics([...topics, newTopic]);
+    }
+  };
+
+  // 1. disable when max links exceeded
+  // 2. switch to open "starred" links
+  const openAllLinksInActiveTopic = () => {
+    for (let i = 0; i < filteredLinks.length; i++) {
+      openLink(filteredLinks[i]);
+    }
+  };
+
+  // example
   // const toggleCompleted = async () => {
   //   const { data, error } = await supabase
   //     .from('todos')
@@ -72,59 +121,127 @@ export const Main = ({ user }) => {
   // };
 
   useEffect(() => {
+    if (!topics) {
+      fetchTopics();
+    }
+
     if (!links) {
       fetchLinks();
     }
-  }, [links]);
+  }, [topics, links]);
 
-  return (
-    <Flex direction='column' bg='paper' height='100vh' overflowY='hidden'>
-      <Flex direction='column' width='100%' justify='flex-start'>
-        <Flex direction='row' px={5} justify='space-between' align='center'>
-          <Flex direction='column'>
+  const renderSideContent = () => {
+    return (
+      <Flex
+        direction='column'
+        width='17%'
+        height='100%'
+        justify='flex-start'
+        align='center'
+        p={5}
+      >
+        <Flex
+          bg='light'
+          width='100%'
+          height='100%'
+          direction='column'
+          align='center'
+          borderRadius={10}
+          boxShadow='base'
+        >
+          <Text
+            color='cyan.500'
+            fontWeight='black'
+            fontSize='2xl'
+            pt={4}
+            pb='40px'
+          >
+            🌐 Atlas
+          </Text>
+          <Box
+            width='100%'
+            onClick={() => {
+              setActiveTopicId(null);
+            }}
+            _hover={{
+              bg: 'gray.100',
+              cursor: 'pointer',
+            }}
+          >
             <Text
-              color='softBlack'
-              fontWeight='black'
-              fontSize={['3xl', '3xl', '4xl']}
-              pt={2}
+              py={2}
+              px={6}
+              alignSelf='flex-start'
+              fontWeight={!activeTopicId ? 'bold' : null}
             >
-              Atlas
+              All Links
             </Text>
-            <Text
-              color='gray.400'
-              fontWeight='black'
-              fontSize={['xl', 'xl', '2xl']}
-              mt={-2}
-            >
-              アトラス
-            </Text>
-          </Flex>
-          <Tools />
+          </Box>
+
+          {topics?.map((topic) => {
+            const { id: topicId, name } = topic;
+            return (
+              <Box
+                key={topicId}
+                width='100%'
+                _hover={{
+                  bg: 'gray.100',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setActiveTopicId(topicId);
+                }}
+              >
+                <Text
+                  py={2}
+                  px={6}
+                  alignSelf='flex-start'
+                  fontWeight={activeTopicId === topicId ? 'bold' : null}
+                  onClick={() => {
+                    setActiveTopicId(topicId);
+                  }}
+                >
+                  {name || 'Untitled'}
+                </Text>
+              </Box>
+            );
+          })}
+          <Button position='absolute' bottom={10} onClick={createTopic}>
+            Create Topic
+          </Button>
         </Flex>
       </Flex>
-      <Flex direction='column' alignItems='center' width='100%' height='100%'>
-        <Flex direction='column' justify='center' align='center' width='100vw'>
-          <Flex
-            direction='column'
-            pb={[4, 4, 8]}
-            pt={4}
-            width={['95vw', '95vw', '65vw']}
-            px={3}
-          >
-            <InputGroup justifySelf='center'>
+    );
+  };
+
+  const renderMainContent = () => {
+    return (
+      <Flex
+        direction='column'
+        alignItems='flex-start'
+        width='83%'
+        height='100%'
+      >
+        <Flex direction='column' width='100%'>
+          <Flex direction='row' pb={[4, 4, 2]} pt={5} px={3}>
+            <InputGroup>
               <Input
+                width={['95vw', '95vw', '50vw']}
+                borderRadius={10}
+                borderWidth='0px'
+                boxShadow='base'
+                bg='light'
                 type='text'
-                placeholder='Enter link...'
+                placeholder='Search links...'
                 value={inputTerm || ''}
                 onChange={(e) => setInputTerm(e.target.value)}
                 disabled={isCreatingLink}
               />
             </InputGroup>
             <Button
-              pt={3}
-              alignSelf='flex-end'
+              p={3}
               variant='link'
-              color='OrientalPink'
+              color={inputTerm ? 'HalfBaked' : 'gray.100'}
               onClick={addLink}
               disabled={!inputTerm || isCreatingLink}
               borderRadius={2}
@@ -138,62 +255,65 @@ export const Main = ({ user }) => {
 
           <Flex
             direction='column'
-            width='100%'
-            // height='100%'
-            // playing with mobile scroll
-            height='calc(100vh - 105px - 75px)'
+            height='calc(100vh - 72px)'
             overflowY='scroll'
-            pt={[1, 1, 5]}
+            pt={[1, 1, 2]}
           >
+            <Flex
+              direction='row'
+              align='center'
+              justify='space-between'
+              width='100%'
+              my={2}
+              mx={2}
+              pb={2}
+            >
+              <Text fontSize='xl' fontWeight={600}>
+                {(activeTopicId
+                  ? activeTopic?.name || 'Untitled'
+                  : 'All Links'
+                ).toUpperCase()}
+              </Text>
+              <Flex width='10%' mr={6}>
+                <Button
+                  width='100px'
+                  borderRadius='8px'
+                  colorScheme='orange'
+                  color='warning'
+                  fontSize='sm'
+                  variant='ghost'
+                  disabled={
+                    !filteredLinks?.length ||
+                    filteredLinks?.length > MAX_OPENABLE_LINKS
+                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openAllLinksInActiveTopic();
+                  }}
+                >
+                  Open All
+                </Button>
+              </Flex>
+            </Flex>
+
             <Links
               category={null}
-              links={links}
+              links={filteredLinks}
               inputTerm={inputTerm}
               deleteLink={deleteLink}
+              activeLinkId={activeLinkId}
+              setActiveLinkId={setActiveLinkId}
             />
           </Flex>
         </Flex>
       </Flex>
-      {/* replace bottom buttons with an account page */}
-      <Button
-        zIndex={100}
-        position='absolute'
-        bottom={[5, 5, 10]}
-        left={[5, 5, 10]}
-        bg='Terracotta'
-        onClick={signOut}
-        borderRadius={2}
-      >
-        Logout
-      </Button>
-      <Box
-        zIndex={100}
-        position='absolute'
-        bottom={[5, 5, 10]}
-        right={[5, 5, 10]}
-      >
-        <input
-          type='file'
-          ref={inputRef}
-          style={{ display: 'none' }}
-          // onChange={(e) => onChange(e.target.files[0])}
-          // accept={acceptedFileTypes}
-          // name={name}
-          // {...inputProps}
-        />
-        <Button
-          onClick={() => inputRef.current.click()}
-          bg='HalfBaked'
-          disabled
-          borderRadius={2}
-          // placeholder={placeholder || 'Your file ...'}
-          // onChange={(e) => {}}
-          // readOnly={true}
-          // value={(value && value.name) || ''}
-        >
-          Import
-        </Button>
-      </Box>
+    );
+  };
+
+  return (
+    <Flex direction='row' bg='canvas' height='100vh' overflowY='hidden'>
+      {renderSideContent()}
+      {renderMainContent()}
     </Flex>
   );
 };

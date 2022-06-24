@@ -1,32 +1,78 @@
 import React from 'react';
-import { Flex } from '@chakra-ui/react';
+import format from 'date-fns/format';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
 import useStore from 'store/useStore';
 import HighlightedText from 'components/HighlightedText';
+import openLink from 'utils/openLink';
 
-export const LinkListItem = ({ link, inputTerm, onClick, activeTool }) => {
+export const LinkListItem = ({
+  link,
+  inputTerm,
+  onClick,
+  activeLinkId,
+  setActiveLinkId,
+  openLink,
+}) => {
+  const {
+    id: linkId,
+    url,
+    created_at: createdAt,
+    name,
+    group_id: groupId,
+  } = link;
+  const linkIsActive = linkId === activeLinkId;
+  const formattedDate = format(new Date(createdAt), 'MM/dd/yyyy');
+
   return (
     <Flex
       onClick={() => {
         onClick(link);
       }}
-      _hover={
-        activeTool
-          ? {
-              cursor: 'pointer',
-              fontWeight: 600,
-              // TODO: have color change based on mode
-              color: activeTool === 'delete' ? 'orange.500' : 'blue.500',
-            }
-          : {}
-      }
+      _hover={{
+        cursor: !linkIsActive ? 'pointer' : null,
+        bg: !linkIsActive ? 'gray.200' : null,
+      }}
+      direction='row'
+      width='100%'
+      bg={linkIsActive ? 'light' : null}
+      minHeight={linkIsActive ? '100px' : null}
+      boxShadow={linkIsActive ? 'base' : null}
+      mb={2}
+      p={4}
+      borderRadius={10}
     >
-      <HighlightedText str={link.url} substr={inputTerm} />
+      <Text width='20%'>{name || 'Testing'}</Text>
+      <Box width='50%'>
+        <HighlightedText str={url} substr={inputTerm} />
+      </Box>
+      <Text width='20%'>{formattedDate}</Text>
+      <Flex align='center' justify='center' width='10%'>
+        <Button
+          width='100px'
+          borderRadius='8px'
+          colorScheme='teal'
+          fontSize='sm'
+          variant={linkIsActive ? 'solid' : 'ghost'}
+          onClick={(e) => {
+            e.stopPropagation();
+            openLink(link);
+          }}
+        >
+          Open
+        </Button>
+      </Flex>
     </Flex>
   );
 };
 
-export const Links = ({ deleteLink, links, inputTerm }) => {
+export const Links = ({
+  deleteLink,
+  links,
+  inputTerm,
+  activeLinkId,
+  setActiveLinkId,
+}) => {
   const activeTool = useStore((state) => state.activeTool);
 
   if (!links) {
@@ -34,31 +80,12 @@ export const Links = ({ deleteLink, links, inputTerm }) => {
     return null;
   }
 
-  const onClick = async (link) => {
-    if (activeTool === 'open') {
-      if (
-        link.url.indexOf('http://') === 0 ||
-        link.url.indexOf('https://') === 0
-      ) {
-        window.open(link.url, '_blank');
-      } else {
-        window.open(`http://${link.url}`, '_blank');
-      }
-    } else if (activeTool === 'delete') {
-      deleteLink(link.id);
-    }
+  const onClick = (link) => {
+    setActiveLinkId(link.id);
   };
 
   return (
-    <Flex
-      direction='row'
-      flexWrap='wrap'
-      justify={['flex-start', 'flex-start', 'center']}
-      align='center'
-      overflowX='hidden'
-      px={2}
-      pb={20}
-    >
+    <Flex direction='column' flex={1} pl={2} mr={5} pb={2}>
       {links.map((link) => {
         return (
           <LinkListItem
@@ -66,7 +93,10 @@ export const Links = ({ deleteLink, links, inputTerm }) => {
             link={link}
             inputTerm={inputTerm}
             onClick={onClick}
+            openLink={openLink}
             activeTool={activeTool}
+            activeLinkId={activeLinkId}
+            setActiveLinkId={setActiveLinkId}
           />
         );
       })}
