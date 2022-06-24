@@ -11,7 +11,6 @@ export const LinkListItem = ({
   inputTerm,
   onClick,
   activeLinkId,
-  setActiveLinkId,
   openLink,
 }) => {
   const {
@@ -19,7 +18,7 @@ export const LinkListItem = ({
     url,
     created_at: createdAt,
     name,
-    group_id: groupId,
+    // group_id: groupId,
   } = link;
   const linkIsActive = linkId === activeLinkId;
   const formattedDate = format(new Date(createdAt), 'MM/dd/yyyy');
@@ -30,10 +29,11 @@ export const LinkListItem = ({
         onClick(link);
       }}
       _hover={{
-        cursor: !linkIsActive ? 'pointer' : null,
+        cursor: 'pointer',
         bg: !linkIsActive ? 'gray.200' : null,
       }}
       direction='row'
+      align={linkIsActive ? 'flex-start' : 'center'}
       width='100%'
       bg={linkIsActive ? 'light' : null}
       minHeight={linkIsActive ? '100px' : null}
@@ -42,7 +42,7 @@ export const LinkListItem = ({
       p={4}
       borderRadius={10}
     >
-      <Text width='20%'>{name || 'Testing'}</Text>
+      <Text width='20%'>{name || 'Unnamed'}</Text>
       <Box width='50%'>
         <HighlightedText str={url} substr={inputTerm} />
       </Box>
@@ -66,13 +66,7 @@ export const LinkListItem = ({
   );
 };
 
-export const Links = ({
-  deleteLink,
-  links,
-  inputTerm,
-  activeLinkId,
-  setActiveLinkId,
-}) => {
+export const Links = ({ links, inputTerm, activeLinkId, setActiveLinkId }) => {
   const activeTool = useStore((state) => state.activeTool);
 
   if (!links) {
@@ -81,7 +75,11 @@ export const Links = ({
   }
 
   const onClick = (link) => {
-    setActiveLinkId(link.id);
+    if (activeLinkId === link.id) {
+      setActiveLinkId(null);
+    } else {
+      setActiveLinkId(link.id);
+    }
   };
 
   return (

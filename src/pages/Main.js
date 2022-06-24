@@ -6,6 +6,7 @@ import Links from 'components/Links';
 import openLink from 'utils/openLink';
 
 const MAX_OPENABLE_LINKS = 10;
+const UNCATEGORIZED = 'UNCATEGORIZED';
 
 export const Main = ({ user }) => {
   const [activeTopicId, setActiveTopicId] = useState(null);
@@ -17,15 +18,29 @@ export const Main = ({ user }) => {
 
   const activeTopic = topics?.find((topic) => topic.id === activeTopicId);
 
-  // TODO: filter to active topic prior to input term filtering
   const filteredLinks = useMemo(() => {
-    // note: duplication of logic with HighlightedText internal code...
-    if (!inputTerm) return links || [];
-
     return links?.filter((link) => {
-      return link?.url.toLowerCase().indexOf(inputTerm.toLowerCase()) >= 0;
+      if (activeTopicId) {
+        if (activeTopicId === UNCATEGORIZED) {
+          if (link?.group_id) {
+            return false;
+          }
+        } else {
+          if (link?.group_id !== activeTopicId) {
+            return false;
+          }
+        }
+      }
+
+      if (inputTerm) {
+        if (link?.url.toLowerCase().indexOf(inputTerm.toLowerCase()) < 0) {
+          return false;
+        }
+      }
+
+      return true;
     });
-  }, [inputTerm, links]);
+  }, [inputTerm, activeTopicId, links]);
 
   // const signOut = () => {
   //   supabase.auth.signOut();
@@ -177,7 +192,25 @@ export const Main = ({ user }) => {
               All Links
             </Text>
           </Box>
-
+          <Box
+            width='100%'
+            onClick={() => {
+              setActiveTopicId(UNCATEGORIZED);
+            }}
+            _hover={{
+              bg: 'gray.100',
+              cursor: 'pointer',
+            }}
+          >
+            <Text
+              py={2}
+              px={6}
+              alignSelf='flex-start'
+              fontWeight={activeTopicId === UNCATEGORIZED ? 'bold' : null}
+            >
+              Uncategorized
+            </Text>
+          </Box>
           {topics?.map((topic) => {
             const { id: topicId, name } = topic;
             return (
@@ -270,7 +303,9 @@ export const Main = ({ user }) => {
             >
               <Text fontSize='xl' fontWeight={600}>
                 {(activeTopicId
-                  ? activeTopic?.name || 'Untitled'
+                  ? activeTopicId === UNCATEGORIZED
+                    ? UNCATEGORIZED
+                    : activeTopic?.name || 'Untitled'
                   : 'All Links'
                 ).toUpperCase()}
               </Text>
