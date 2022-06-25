@@ -23,7 +23,7 @@ export const HighlightedText = ({ str, substr = '' }) => {
     return (
       <Text fontSize={['sm', 'sm', 'md']} mx={1} my={0.5}>
         {startText}
-        <Text as='span' fontWeight={600} color='warning'>
+        <Text as='span' fontWeight={600} color='teal'>
           {highlightedText}
         </Text>
         {endText}

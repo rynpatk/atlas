@@ -35,7 +35,7 @@ export const LinkListItem = ({
       }}
       _hover={{
         cursor: 'pointer',
-        bg: !linkIsActive ? 'gray.200' : null,
+        bg: !linkIsActive ? 'gray.100' : null,
       }}
       direction='row'
       align={linkIsActive ? 'flex-start' : 'center'}
@@ -76,7 +76,8 @@ export const LinkListItem = ({
         <Button
           width='100px'
           borderRadius='8px'
-          colorScheme='teal'
+          colorScheme='orange'
+          color={linkIsActive ? 'white' : 'warning'}
           fontSize='sm'
           variant={linkIsActive ? 'solid' : 'ghost'}
           onClick={(e) => {

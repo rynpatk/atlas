@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Box, Button, Input, InputGroup, Flex, Text } from '@chakra-ui/react';
 import supabase from 'supabase';
+import { EditText } from 'react-edit-text';
 
 import Links from 'components/Links';
 import openLink from 'utils/openLink';
 
 const MAX_OPENABLE_LINKS = 10;
-const UNCATEGORIZED = 'UNCATEGORIZED';
+const UNCATEGORIZED = 'Uncategorized';
 
 export const Main = ({ user }) => {
   const [activeTopicId, setActiveTopicId] = useState(null);
@@ -17,6 +18,7 @@ export const Main = ({ user }) => {
   const [topics, setTopics] = useState(null);
 
   const activeTopic = topics?.find((topic) => topic.id === activeTopicId);
+  const [newTopicName, setNewTopicName] = useState(activeTopic?.name || '');
 
   const filteredLinks = useMemo(() => {
     return links?.filter((link) => {
@@ -122,7 +124,27 @@ export const Main = ({ user }) => {
     }
   };
 
-  // example
+  const editTopicName = async ({ topicId, newTopicName }) => {
+    const { data: updatedTopic, error } = await supabase
+      .from('groups')
+      .update({ name: newTopicName })
+      .eq('id', topicId)
+      .single();
+
+    if (error) {
+      console.error(error);
+    } else {
+      const updatedTopics = topics.map((topic) => {
+        if (topic.id === updatedTopic.id) {
+          return updatedTopic;
+        }
+        return topic;
+      });
+
+      setTopics(updatedTopics);
+    }
+  };
+
   const editLinkName = async ({ linkId, newLinkName }) => {
     const { data: updatedLink, error } = await supabase
       .from('links')
@@ -251,7 +273,13 @@ export const Main = ({ user }) => {
               </Box>
             );
           })}
-          <Button position='absolute' bottom={10} onClick={createTopic}>
+          <Button
+            fontSize='sm'
+            bg='gray.200'
+            position='absolute'
+            bottom={10}
+            onClick={createTopic}
+          >
             Create Topic
           </Button>
         </Flex>
@@ -268,8 +296,14 @@ export const Main = ({ user }) => {
         height='100%'
       >
         <Flex direction='column' width='100%'>
-          <Flex direction='row' pb={[4, 4, 2]} pt={5} px={3}>
-            <InputGroup>
+          <Flex
+            direction='row'
+            justify='flex-start'
+            pb={[4, 4, 2]}
+            pt={5}
+            px={3}
+          >
+            <InputGroup flex={0}>
               <Input
                 width={['95vw', '95vw', '50vw']}
                 borderRadius={10}
@@ -283,19 +317,21 @@ export const Main = ({ user }) => {
                 disabled={isCreatingLink}
               />
             </InputGroup>
-            <Button
-              p={3}
-              variant='link'
-              color={inputTerm ? 'HalfBaked' : 'gray.100'}
-              onClick={addLink}
-              disabled={!inputTerm || isCreatingLink}
-              borderRadius={2}
-              _hover={{
-                textDecoration: 'none',
-              }}
-            >
-              Add
-            </Button>
+            {inputTerm ? (
+              <Button
+                ml={2}
+                onClick={addLink}
+                disabled={isCreatingLink}
+                //bg='gray.200'
+                colorScheme='teal'
+                fontSize='sm'
+                _hover={{
+                  textDecoration: 'none',
+                }}
+              >
+                Create link
+              </Button>
+            ) : null}
           </Flex>
 
           <Flex
@@ -314,22 +350,31 @@ export const Main = ({ user }) => {
               mx={2}
               pb={2}
             >
-              <Text fontSize='xl' fontWeight={600}>
-                {(activeTopicId
-                  ? activeTopicId === UNCATEGORIZED
-                    ? UNCATEGORIZED
-                    : activeTopic?.name || 'Untitled'
-                  : 'All Links'
-                ).toUpperCase()}
-              </Text>
+              {!activeTopicId || activeTopicId === UNCATEGORIZED ? (
+                <Text fontSize='xl' fontWeight={600}>
+                  {activeTopicId ? UNCATEGORIZED : 'All Links'}
+                </Text>
+              ) : (
+                <EditText
+                  style={{ width: '300px', fontSize: '20px', fontWeight: 600 }}
+                  value={newTopicName || ''}
+                  placeholder='Enter topic name...'
+                  onChange={(e) => {
+                    setNewTopicName(e.target.value);
+                  }}
+                  onBlur={() => {
+                    editTopicName({ topicId: activeTopic.id, newTopicName });
+                  }}
+                  readonly={!activeTopicId || activeTopicId === UNCATEGORIZED}
+                />
+              )}
+
               <Flex mr={10}>
                 <Button
                   width='100px'
                   borderRadius='8px'
-                  colorScheme='orange'
-                  color='warning'
                   fontSize='sm'
-                  variant='ghost'
+                  bg='gray.200'
                   disabled={
                     !filteredLinks?.length ||
                     filteredLinks?.length > MAX_OPENABLE_LINKS
