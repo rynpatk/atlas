@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import format from 'date-fns/format';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { EditText } from 'react-edit-text';
 
 import useStore from 'store/useStore';
 import HighlightedText from 'components/HighlightedText';
 import openLink from 'utils/openLink';
+
+import 'react-edit-text/dist/index.css';
 
 export const LinkListItem = ({
   link,
@@ -12,6 +15,7 @@ export const LinkListItem = ({
   onClick,
   activeLinkId,
   openLink,
+  editLinkName,
 }) => {
   const {
     id: linkId,
@@ -20,6 +24,7 @@ export const LinkListItem = ({
     name,
     // group_id: groupId,
   } = link;
+  const [newLinkName, setNewLinkName] = useState(link?.name || '');
   const linkIsActive = linkId === activeLinkId;
   const formattedDate = format(new Date(createdAt), 'MM/dd/yyyy');
 
@@ -39,15 +44,35 @@ export const LinkListItem = ({
       minHeight={linkIsActive ? '100px' : null}
       boxShadow={linkIsActive ? 'base' : null}
       mb={2}
-      p={4}
+      py={1}
+      px={3}
       borderRadius={10}
     >
-      <Text width='20%'>{name || 'Unnamed'}</Text>
-      <Box width='50%'>
+      {linkIsActive ? (
+        <EditText
+          py={1}
+          style={{ width: '200px' }}
+          value={newLinkName || ''}
+          placeholder='Enter name...'
+          onChange={(e) => {
+            setNewLinkName(e.target.value);
+          }}
+          onBlur={() => {
+            editLinkName({ linkId: link.id, newLinkName });
+          }}
+        />
+      ) : (
+        <Text py={1} width='200px' color={name ? 'black' : 'gray'}>
+          {name || 'Unnamed'}
+        </Text>
+      )}
+      <Box py={1} width='50%'>
         <HighlightedText str={url} substr={inputTerm} />
       </Box>
-      <Text width='20%'>{formattedDate}</Text>
-      <Flex align='center' justify='center' width='10%'>
+      <Text py={1} width='20%'>
+        {formattedDate}
+      </Text>
+      <Flex align='center' justify='flex-end' flex={1}>
         <Button
           width='100px'
           borderRadius='8px'
@@ -66,7 +91,13 @@ export const LinkListItem = ({
   );
 };
 
-export const Links = ({ links, inputTerm, activeLinkId, setActiveLinkId }) => {
+export const Links = ({
+  links,
+  inputTerm,
+  activeLinkId,
+  setActiveLinkId,
+  editLinkName,
+}) => {
   const activeTool = useStore((state) => state.activeTool);
 
   if (!links) {
@@ -76,7 +107,7 @@ export const Links = ({ links, inputTerm, activeLinkId, setActiveLinkId }) => {
 
   const onClick = (link) => {
     if (activeLinkId === link.id) {
-      setActiveLinkId(null);
+      // setActiveLinkId(null);
     } else {
       setActiveLinkId(link.id);
     }
@@ -95,6 +126,7 @@ export const Links = ({ links, inputTerm, activeLinkId, setActiveLinkId }) => {
             activeTool={activeTool}
             activeLinkId={activeLinkId}
             setActiveLinkId={setActiveLinkId}
+            editLinkName={editLinkName}
           />
         );
       })}

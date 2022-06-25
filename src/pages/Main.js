@@ -123,17 +123,26 @@ export const Main = ({ user }) => {
   };
 
   // example
-  // const toggleCompleted = async () => {
-  //   const { data, error } = await supabase
-  //     .from('todos')
-  //     .update({ is_complete: !isCompleted })
-  //     .eq('id', todo.id)
-  //     .single();
-  //   if (error) {
-  //     console.error(error);
-  //   }
-  //   setIsCompleted(data.is_complete);
-  // };
+  const editLinkName = async ({ linkId, newLinkName }) => {
+    const { data: updatedLink, error } = await supabase
+      .from('links')
+      .update({ name: newLinkName })
+      .eq('id', linkId)
+      .single();
+
+    if (error) {
+      console.error(error);
+    } else {
+      const updatedLinks = links.map((link) => {
+        if (link.id === updatedLink.id) {
+          return updatedLink;
+        }
+        return link;
+      });
+
+      setLinks(updatedLinks);
+    }
+  };
 
   useEffect(() => {
     if (!topics) {
@@ -175,6 +184,7 @@ export const Main = ({ user }) => {
           </Text>
           <Box
             width='100%'
+            bg={!activeTopicId ? 'gray.50' : null}
             onClick={() => {
               setActiveTopicId(null);
             }}
@@ -194,6 +204,7 @@ export const Main = ({ user }) => {
           </Box>
           <Box
             width='100%'
+            bg={activeTopicId === UNCATEGORIZED ? 'gray.50' : null}
             onClick={() => {
               setActiveTopicId(UNCATEGORIZED);
             }}
@@ -217,6 +228,7 @@ export const Main = ({ user }) => {
               <Box
                 key={topicId}
                 width='100%'
+                bg={activeTopicId === topicId ? 'gray.50' : null}
                 _hover={{
                   bg: 'gray.100',
                   cursor: 'pointer',
@@ -290,6 +302,7 @@ export const Main = ({ user }) => {
             direction='column'
             height='calc(100vh - 72px)'
             overflowY='scroll'
+            overflowX='hidden'
             pt={[1, 1, 2]}
           >
             <Flex
@@ -309,7 +322,7 @@ export const Main = ({ user }) => {
                   : 'All Links'
                 ).toUpperCase()}
               </Text>
-              <Flex width='10%' mr={6}>
+              <Flex mr={10}>
                 <Button
                   width='100px'
                   borderRadius='8px'
@@ -338,6 +351,7 @@ export const Main = ({ user }) => {
               deleteLink={deleteLink}
               activeLinkId={activeLinkId}
               setActiveLinkId={setActiveLinkId}
+              editLinkName={editLinkName}
             />
           </Flex>
         </Flex>
