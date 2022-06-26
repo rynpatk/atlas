@@ -4,6 +4,7 @@ import supabase from 'supabase';
 import { EditText } from 'react-edit-text';
 
 import Links from 'components/Links';
+import TopicListItem from 'components/TopicListItem';
 import openLink from 'utils/openLink';
 
 const MAX_OPENABLE_LINKS = 10;
@@ -269,32 +270,14 @@ export const Main = ({ user }) => {
             </Text>
           </Box>
           {topics?.map((topic) => {
-            const { id: topicId, name } = topic;
             return (
-              <Box
-                key={topicId}
-                width='100%'
-                bg={activeTopicId === topicId ? 'gray.50' : null}
-                _hover={{
-                  bg: 'gray.100',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  setActiveTopicId(topicId);
-                }}
-              >
-                <Text
-                  py={2}
-                  px={6}
-                  alignSelf='flex-start'
-                  fontWeight={activeTopicId === topicId ? 'bold' : null}
-                  onClick={() => {
-                    setActiveTopicId(topicId);
-                  }}
-                >
-                  {name || 'Untitled'} ({topicLinkCountsMap[topic.id]})
-                </Text>
-              </Box>
+              <TopicListItem
+                key={topic.id}
+                topic={topic}
+                activeTopicId={activeTopicId}
+                setActiveTopicId={setActiveTopicId}
+                topicLinksCount={topicLinkCountsMap[topic.id]}
+              />
             );
           })}
           <Button
