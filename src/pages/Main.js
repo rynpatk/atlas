@@ -44,6 +44,24 @@ export const Main = ({ user }) => {
     });
   }, [inputTerm, activeTopicId, links]);
 
+  const topicLinkCountsMap = useMemo(() => {
+    return topics?.reduce((acc, topic) => {
+      const { id: topicId } = topic;
+      const linksForTopic = links?.filter((link) => {
+        return link.group_id === topicId;
+      });
+
+      return {
+        ...acc,
+        [topicId]: linksForTopic?.length || 0,
+      };
+    }, {});
+  }, [topics, links]);
+
+  const uncategorizedLinksCount = useMemo(() => {
+    return links?.filter((link) => !link.group_id)?.length || 0;
+  }, [links]);
+
   // const signOut = () => {
   //   supabase.auth.signOut();
   // };
@@ -221,7 +239,7 @@ export const Main = ({ user }) => {
               alignSelf='flex-start'
               fontWeight={!activeTopicId ? 'bold' : null}
             >
-              All Links
+              All Links ({links?.length})
             </Text>
           </Box>
           <Box
@@ -241,7 +259,7 @@ export const Main = ({ user }) => {
               alignSelf='flex-start'
               fontWeight={activeTopicId === UNCATEGORIZED ? 'bold' : null}
             >
-              Uncategorized
+              Uncategorized ({uncategorizedLinksCount})
             </Text>
           </Box>
           {topics?.map((topic) => {
@@ -268,7 +286,7 @@ export const Main = ({ user }) => {
                     setActiveTopicId(topicId);
                   }}
                 >
-                  {name || 'Untitled'}
+                  {name || 'Untitled'} ({topicLinkCountsMap[topic.id]})
                 </Text>
               </Box>
             );
