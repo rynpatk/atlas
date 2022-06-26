@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Text } from '@chakra-ui/react';
 import supabase from 'supabase';
 
@@ -32,16 +34,18 @@ const App = () => {
   }, [user]);
 
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <Routes>
-        <Route
-          exact
-          path='/'
-          element={isAuthenticated ? <Main user={user} /> : <Login />}
-        />
-        <Route element={<Text>Oops!</Text>} status={404} />
-      </Routes>
-    </BrowserRouter>
+    <DndProvider backend={HTML5Backend}>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <Routes>
+          <Route
+            exact
+            path='/'
+            element={isAuthenticated ? <Main user={user} /> : <Login />}
+          />
+          <Route element={<Text>Oops!</Text>} status={404} />
+        </Routes>
+      </BrowserRouter>
+    </DndProvider>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import format from 'date-fns/format';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { EditText } from 'react-edit-text';
+import { useDrag } from 'react-dnd';
 
 import useStore from 'store/useStore';
 import HighlightedText from 'components/HighlightedText';
@@ -25,6 +26,13 @@ export const LinkListItem = ({
     // group_id: groupId,
   } = link;
   const [newLinkName, setNewLinkName] = useState(link?.name || '');
+  const [{ isDragging }, dragRef] = useDrag({
+    type: 'link',
+    item: link,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
   const linkIsActive = linkId === activeLinkId;
   const formattedDate = format(new Date(createdAt), 'MM/dd/yyyy');
 
@@ -47,6 +55,7 @@ export const LinkListItem = ({
       py={1}
       px={3}
       borderRadius={10}
+      ref={dragRef}
     >
       {linkIsActive ? (
         <EditText
