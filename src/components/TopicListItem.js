@@ -7,11 +7,12 @@ export const TopicListItem = ({
   activeTopicId,
   setActiveTopicId,
   topicLinksCount,
+  addLinkToTopic,
 }) => {
   const [{ isOver }, dropRef] = useDrop({
     accept: 'link',
     drop: (item) => {
-      console.log(item);
+      addLinkToTopic({ linkId: item.id, topicId: topic.id });
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),

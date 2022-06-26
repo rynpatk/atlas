@@ -191,6 +191,27 @@ export const Main = ({ user }) => {
     }
   };
 
+  const addLinkToTopic = async ({ linkId, topicId }) => {
+    const { data: updatedLink, error } = await supabase
+      .from('links')
+      .update({ group_id: topicId })
+      .eq('id', linkId)
+      .single();
+
+    if (error) {
+      console.error(error);
+    } else {
+      const updatedLinks = links.map((link) => {
+        if (link.id === updatedLink.id) {
+          return updatedLink;
+        }
+        return link;
+      });
+
+      setLinks(updatedLinks);
+    }
+  };
+
   useEffect(() => {
     if (!topics) {
       fetchTopics();
@@ -277,6 +298,7 @@ export const Main = ({ user }) => {
                 activeTopicId={activeTopicId}
                 setActiveTopicId={setActiveTopicId}
                 topicLinksCount={topicLinkCountsMap[topic.id]}
+                addLinkToTopic={addLinkToTopic}
               />
             );
           })}
