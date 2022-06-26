@@ -62,6 +62,12 @@ export const Main = ({ user }) => {
     return links?.filter((link) => !link.group_id)?.length || 0;
   }, [links]);
 
+  useEffect(() => {
+    if (activeTopic?.name) {
+      setNewTopicName(activeTopic.name);
+    }
+  }, [activeTopic]);
+
   // const signOut = () => {
   //   supabase.auth.signOut();
   // };
@@ -340,7 +346,6 @@ export const Main = ({ user }) => {
                 ml={2}
                 onClick={addLink}
                 disabled={isCreatingLink}
-                //bg='gray.200'
                 colorScheme='teal'
                 fontSize='sm'
                 _hover={{
