@@ -46,17 +46,17 @@ export const LinkListItem = ({
       }}
       _hover={{
         cursor: 'pointer',
-        bg: !linkIsActive ? 'gray.100' : null,
+        bg: !linkIsActive ? 'gray.200' : null,
       }}
       direction='row'
       align={linkIsActive ? 'flex-start' : 'center'}
       width='100%'
-      bg={isDragging ? 'gray.50' : linkIsActive ? 'light' : null}
+      bg={isDragging ? 'gray.200' : linkIsActive ? 'light' : null}
       minHeight={linkIsActive ? '100px' : null}
       boxShadow={linkIsActive ? 'base' : null}
       mb={2}
-      py={1}
-      px={3}
+      py={2}
+      px={2}
       borderRadius={10}
       ref={dragRef}
     >
@@ -87,11 +87,11 @@ export const LinkListItem = ({
       </Box>
 
       <Flex align='center' justify='flex-end' flex={1}>
-        <Stack direction='row' spacing={4} align='center'>
+        <Stack direction='row' spacing={2} align='center'>
           {linkIsActive ? (
             <Button
               width='100px'
-              borderRadius='8px'
+              borderRadius={8}
               colorScheme='red'
               color={linkIsActive ? 'white' : 'warning'}
               fontSize='sm'
@@ -107,9 +107,9 @@ export const LinkListItem = ({
           ) : null}
           <Button
             width='100px'
-            borderRadius='8px'
-            colorScheme='orange'
-            color={linkIsActive ? 'white' : 'warning'}
+            borderRadius={8}
+            colorScheme={linkIsActive ? 'teal' : null}
+            color={linkIsActive ? 'white' : 'gray.600'}
             fontSize='sm'
             variant={linkIsActive ? 'solid' : 'ghost'}
             rightIcon={<IoArrowRedoOutline size='20px' />}

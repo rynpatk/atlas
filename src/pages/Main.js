@@ -308,8 +308,9 @@ export const Main = ({ user }) => {
             position='absolute'
             bottom={10}
             onClick={createTopic}
+            borderRadius={8}
           >
-            Create Topic
+            NEW GROUP
           </Button>
         </Flex>
       </Flex>
@@ -400,7 +401,7 @@ export const Main = ({ user }) => {
               <Flex mr={10}>
                 <Button
                   width='100px'
-                  borderRadius='8px'
+                  borderRadius={8}
                   fontSize='sm'
                   bg='gray.200'
                   disabled={
