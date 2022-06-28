@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import format from 'date-fns/format';
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { EditText } from 'react-edit-text';
 import { useDrag } from 'react-dnd';
+import { IoTrashOutline, IoArrowRedoOutline } from 'react-icons/io5';
 
 import useStore from 'store/useStore';
 import HighlightedText from 'components/HighlightedText';
@@ -17,14 +18,8 @@ export const LinkListItem = ({
   activeLinkId,
   openLink,
   editLinkName,
+  deleteLink,
 }) => {
-  const {
-    id: linkId,
-    url,
-    created_at: createdAt,
-    name,
-    // group_id: groupId,
-  } = link;
   const [newLinkName, setNewLinkName] = useState(link?.name || '');
   const [{ isDragging }, dragRef] = useDrag({
     type: 'link',
@@ -33,8 +28,16 @@ export const LinkListItem = ({
       isDragging: monitor.isDragging(),
     }),
   });
+
+  const {
+    id: linkId,
+    url,
+    created_at: createdAt,
+    name,
+    // group_id: groupId,
+  } = link;
   const linkIsActive = linkId === activeLinkId;
-  const formattedDate = format(new Date(createdAt), 'MM/dd/yyyy');
+  const formattedDate = format(new Date(createdAt), 'MMM d');
 
   return (
     <Flex
@@ -75,27 +78,49 @@ export const LinkListItem = ({
           {name || 'Unnamed'}
         </Text>
       )}
+      <Text py={1} color='gray' width='200px'>
+        Added {formattedDate}
+      </Text>
+
       <Box py={1} width='50%'>
         <HighlightedText str={url} substr={inputTerm} />
       </Box>
-      <Text py={1} width='20%'>
-        {formattedDate}
-      </Text>
+
       <Flex align='center' justify='flex-end' flex={1}>
-        <Button
-          width='100px'
-          borderRadius='8px'
-          colorScheme='orange'
-          color={linkIsActive ? 'white' : 'warning'}
-          fontSize='sm'
-          variant={linkIsActive ? 'solid' : 'ghost'}
-          onClick={(e) => {
-            e.stopPropagation();
-            openLink(link);
-          }}
-        >
-          Open
-        </Button>
+        <Stack direction='row' spacing={4} align='center'>
+          {linkIsActive ? (
+            <Button
+              width='100px'
+              borderRadius='8px'
+              colorScheme='red'
+              color={linkIsActive ? 'white' : 'warning'}
+              fontSize='sm'
+              variant={linkIsActive ? 'solid' : 'ghost'}
+              rightIcon={<IoTrashOutline size='18px' />}
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteLink(link.id);
+              }}
+            >
+              DELETE
+            </Button>
+          ) : null}
+          <Button
+            width='100px'
+            borderRadius='8px'
+            colorScheme='orange'
+            color={linkIsActive ? 'white' : 'warning'}
+            fontSize='sm'
+            variant={linkIsActive ? 'solid' : 'ghost'}
+            rightIcon={<IoArrowRedoOutline size='20px' />}
+            onClick={(e) => {
+              e.stopPropagation();
+              openLink(link);
+            }}
+          >
+            OPEN
+          </Button>
+        </Stack>
       </Flex>
     </Flex>
   );
@@ -107,6 +132,7 @@ export const Links = ({
   activeLinkId,
   setActiveLinkId,
   editLinkName,
+  deleteLink,
 }) => {
   const activeTool = useStore((state) => state.activeTool);
 
@@ -137,6 +163,7 @@ export const Links = ({
             activeLinkId={activeLinkId}
             setActiveLinkId={setActiveLinkId}
             editLinkName={editLinkName}
+            deleteLink={deleteLink}
           />
         );
       })}

@@ -90,7 +90,7 @@ export const Main = ({ user }) => {
     const { data, error } = await supabase
       .from('links')
       .select('*')
-      .order('id', { ascending: true });
+      .order('id', { ascending: false });
 
     if (error) {
       console.log('error', error);
@@ -412,7 +412,7 @@ export const Main = ({ user }) => {
                     openAllLinksInActiveTopic();
                   }}
                 >
-                  Open All
+                  OPEN ALL
                 </Button>
               </Flex>
             </Flex>
