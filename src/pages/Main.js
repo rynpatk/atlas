@@ -121,7 +121,7 @@ export const Main = ({ user }) => {
       console.log(error);
       setIsCreatingLink(false);
     } else {
-      setLinks([...links, newLink]);
+      setLinks([newLink, ...links]);
       setInputTerm(null);
       setIsCreatingLink(false);
     }
@@ -264,6 +264,7 @@ export const Main = ({ user }) => {
             <Text
               py={2}
               px={6}
+              fontSize={['sm', 'sm', 'lg']}
               alignSelf='flex-start'
               fontWeight={!activeTopicId ? 'bold' : null}
             >
@@ -284,6 +285,7 @@ export const Main = ({ user }) => {
             <Text
               py={2}
               px={6}
+              fontSize={['sm', 'sm', 'lg']}
               alignSelf='flex-start'
               fontWeight={activeTopicId === UNCATEGORIZED ? 'bold' : null}
             >
@@ -303,7 +305,7 @@ export const Main = ({ user }) => {
             );
           })}
           <Button
-            fontSize='sm'
+            fontSize='md'
             bg='gray.200'
             position='absolute'
             bottom={10}
@@ -341,6 +343,7 @@ export const Main = ({ user }) => {
                 boxShadow='base'
                 bg='light'
                 type='text'
+                fontSize={['sm', 'sm', 'lg']}
                 placeholder='Search links...'
                 value={inputTerm || ''}
                 onChange={(e) => setInputTerm(e.target.value)}
@@ -353,7 +356,7 @@ export const Main = ({ user }) => {
                 onClick={addLink}
                 disabled={isCreatingLink}
                 colorScheme='teal'
-                fontSize='sm'
+                fontSize='md'
                 _hover={{
                   textDecoration: 'none',
                 }}
@@ -402,7 +405,7 @@ export const Main = ({ user }) => {
                 <Button
                   width='100px'
                   borderRadius={8}
-                  fontSize='sm'
+                  fontSize='md'
                   bg='gray.200'
                   disabled={
                     !filteredLinks?.length ||

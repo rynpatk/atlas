@@ -5,8 +5,8 @@ import colors from './colors';
 export const theme = extendTheme({
   colors,
   fonts: {
-    heading: 'Sora',
-    body: 'Sora',
+    heading: 'Titillium Web',
+    body: 'Titillium Web',
   },
 });
 

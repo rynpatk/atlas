@@ -37,6 +37,7 @@ export const TopicListItem = ({
       <Text
         py={2}
         px={6}
+        fontSize={['sm', 'sm', 'lg']}
         alignSelf='flex-start'
         fontWeight={activeTopicId === topicId ? 'bold' : null}
         onClick={() => {

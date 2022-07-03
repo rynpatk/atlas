@@ -3,7 +3,8 @@ import format from 'date-fns/format';
 import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { EditText } from 'react-edit-text';
 import { useDrag } from 'react-dnd';
-import { IoTrashOutline, IoArrowRedoOutline } from 'react-icons/io5';
+// import { IoArrowRedoOutline } from 'react-icons/io5';
+import { FiTrash, FiNavigation } from 'react-icons/fi';
 
 import useStore from 'store/useStore';
 import HighlightedText from 'components/HighlightedText';
@@ -63,7 +64,7 @@ export const LinkListItem = ({
       {linkIsActive ? (
         <EditText
           py={1}
-          style={{ width: '200px' }}
+          style={{ width: '200px', fontSize: '18px' }}
           value={newLinkName || ''}
           placeholder='Enter name...'
           onChange={(e) => {
@@ -74,11 +75,16 @@ export const LinkListItem = ({
           }}
         />
       ) : (
-        <Text py={1} width='200px' color={name ? 'black' : 'gray'}>
+        <Text
+          py={1}
+          width='200px'
+          color={name ? 'black' : 'gray'}
+          fontSize={['sm', 'sm', 'lg']}
+        >
           {name || 'Unnamed'}
         </Text>
       )}
-      <Text py={1} color='gray' width='200px'>
+      <Text py={1} color='gray' width='200px' fontSize={['sm', 'sm', 'lg']}>
         Added {formattedDate}
       </Text>
 
@@ -94,9 +100,9 @@ export const LinkListItem = ({
               borderRadius={8}
               colorScheme='red'
               color={linkIsActive ? 'white' : 'warning'}
-              fontSize='sm'
+              fontSize='md'
               variant={linkIsActive ? 'solid' : 'ghost'}
-              rightIcon={<IoTrashOutline size='18px' />}
+              rightIcon={<FiTrash size='18px' />}
               onClick={(e) => {
                 e.stopPropagation();
                 deleteLink(link.id);
@@ -110,9 +116,9 @@ export const LinkListItem = ({
             borderRadius={8}
             colorScheme={linkIsActive ? 'teal' : null}
             color={linkIsActive ? 'white' : 'gray.600'}
-            fontSize='sm'
+            fontSize='md'
             variant={linkIsActive ? 'solid' : 'ghost'}
-            rightIcon={<IoArrowRedoOutline size='20px' />}
+            rightIcon={<FiNavigation size='20px' />}
             onClick={(e) => {
               e.stopPropagation();
               openLink(link);

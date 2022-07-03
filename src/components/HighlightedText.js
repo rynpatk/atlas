@@ -5,7 +5,7 @@ export const HighlightedText = ({ str, substr = '' }) => {
   if (!substr || !substr.trim()) {
     return (
       <>
-        <Text mx={1} my={0.5} fontSize={['sm', 'sm', 'md']}>
+        <Text mx={1} my={0.5} fontSize={['sm', 'sm', 'lg']}>
           {str}
         </Text>
       </>
@@ -21,7 +21,7 @@ export const HighlightedText = ({ str, substr = '' }) => {
     const endText = str.slice(endIndex, str.length);
 
     return (
-      <Text fontSize={['sm', 'sm', 'md']} mx={1} my={0.5}>
+      <Text fontSize={['sm', 'sm', 'lg']} mx={1} my={0.5}>
         {startText}
         <Text as='span' fontWeight={600} color='teal'>
           {highlightedText}
